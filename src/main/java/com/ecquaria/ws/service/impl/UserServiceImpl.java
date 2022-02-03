@@ -7,11 +7,15 @@ import org.springframework.stereotype.Service;
 import com.ecquaria.ws.UserRepository;
 import com.ecquaria.ws.io.entity.UserEntity;
 import com.ecquaria.ws.service.UserService;
+import com.ecquaria.ws.shared.Utils;
 import com.ecquaria.ws.shared.dto.UserDto;
 
 @Service
 public class UserServiceImpl implements UserService {
 
+	@Autowired
+	Utils utils;
+	
 	@Autowired
 	UserRepository userRepository;
 
@@ -23,8 +27,9 @@ public class UserServiceImpl implements UserService {
 		UserEntity userEntity = new UserEntity();
 		BeanUtils.copyProperties(user, userEntity);
 		
+		String publicUserId = utils.generateUserId(30);
+		userEntity.setUserId(publicUserId);
 		userEntity.setEncryptedPassword("test");
-		userEntity.setUserId("testUserId");
 		
 		UserEntity storedUserDetails = userRepository.save(userEntity);
 		
